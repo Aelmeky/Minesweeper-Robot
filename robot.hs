@@ -27,7 +27,7 @@ collect:: MyState -> MyState
 collect (S (x,y) l s o ) | (elem (x,y) l ) = S (x,y) (remMine (x,y) l) "collect" (S (x,y) l s o)
 		| otherwise = Null
 
--- Check function type should contain Eq
+
 remMine :: Cell -> [Cell] -> [Cell]
 
 remMine (x,y) [] = []

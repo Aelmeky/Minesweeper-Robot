@@ -15,7 +15,7 @@ seek :: Cell -> Cell -> [String]
 seek (xi,yi) (xf,yf) = (seekx (xf-xi)) ++ (seeky (yf-yi))++["collect"]
 
 
-
+solveHelper :: MyState ->[String]-> [String]
 solveHelper (S (x,y) []) sol = sol
 
 solveHelper (S (x,y) (h:t)) sol = solveHelper (S h t) (sol ++ (seek (x,y) h))
