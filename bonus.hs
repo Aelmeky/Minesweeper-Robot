@@ -23,25 +23,28 @@ solveHelper (S (x,y) (h:t)) sol = solveHelper (S h t) (sol ++ (seek (x,y) h))
 		
 solve :: Cell->[Cell]->[String]
 
-solve pos mines = solveHelper (S pos (sortMines mines [])) []
+solve pos mines = solveHelper (S pos (sortMines [] pos mines)) []
 
+distToMine :: Cell -> Cell -> Int
+distToMine (xi,yi) (xf,yf) = ((abs (xf-xi)) + (abs (yf-yi)))
 
-compareTo :: Cell -> Cell -> Int
+remMine :: Cell -> [Cell] -> [Cell]
 
-compareTo (a,b) (c,d) | (not ((a-c)==0)) = a-c
-						| otherwise = b-d
+remMine (x,y) [] = []
+remMine (x,y) ((hx,hy):t) | (hx == x && hy == y) = t
+			| otherwise = (hx,hy):(remMine (x,y) t)
 
+nearestMine :: Cell -> Cell -> Int -> [Cell] -> Cell
+			
+nearestMine ref near d [] = near
 
-insertSort :: Cell -> [Cell] -> [Cell]
-
-insertSort x [] = [x]					
-insertSort x (h:t) | ( (compareTo x h) <= 0) = x:h:t
-					|otherwise = h:(insertSort x t)
-					
-sortMines :: [Cell] -> [Cell] -> [Cell]
-sortMines [] sol = sol
-sortMines (h:t) sol = sortMines t (insertSort h sol)
-
+nearestMine ref near d (h:t) | (d == -1) = nearestMine ref h (distToMine ref h) t 
+							|  (distToMine ref h) < d = (nearestMine ref h (distToMine ref h) t)
+							 | otherwise = nearestMine ref near d t
+	
+sortMines :: [Cell] -> Cell -> [Cell] -> [Cell]
+sortMines sorted (x,y) [] = sorted
+sortMines sorted ref mines  = sortMines (sorted ++ [(nearestMine ref (0,0) (-1) mines)]) (nearestMine ref (0,0) (-1) mines) (remMine (nearestMine ref (0,0) (-1) mines) mines)
 
 
 
