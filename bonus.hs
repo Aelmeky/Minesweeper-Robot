@@ -21,7 +21,6 @@ solveHelp (S (x,y) []) sol = sol
 solveHelp (S (x,y) (h:t)) sol = solveHelp (S h t) (sol ++ (seek (x,y) h))
 
 		
-solve :: Cell->[Cell]->[String]
 
 solve pos mines = solveHelp (S pos (sortMines [] pos mines)) []
 
