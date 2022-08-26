@@ -15,15 +15,15 @@ seek :: Cell -> Cell -> [String]
 seek (xi,yi) (xf,yf) = (seekx (xf-xi)) ++ (seeky (yf-yi))++["collect"]
 
 
-solveHelper :: MyState ->[String]-> [String]
-solveHelper (S (x,y) []) sol = sol
+solveHelp :: MyState ->[String]-> [String]
+solveHelp (S (x,y) []) sol = sol
 
-solveHelper (S (x,y) (h:t)) sol = solveHelper (S h t) (sol ++ (seek (x,y) h))
+solveHelp (S (x,y) (h:t)) sol = solveHelp (S h t) (sol ++ (seek (x,y) h))
 
 		
 solve :: Cell->[Cell]->[String]
 
-solve pos mines = solveHelper (S pos (sortMines [] pos mines)) []
+solve pos mines = solveHelp (S pos (sortMines [] pos mines)) []
 
 distToMine :: Cell -> Cell -> Int
 distToMine (xi,yi) (xf,yf) = ((abs (xf-xi)) + (abs (yf-yi)))
